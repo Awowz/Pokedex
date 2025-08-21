@@ -4,6 +4,8 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+
+	"github.com/Awowz/Pokedex/internal/pokeapi"
 )
 
 // type struct for all commands
@@ -14,14 +16,14 @@ type cliCommand struct {
 }
 
 type config struct {
-	next     *string
-	previous *string
+	pokeapiClient pokeapi.Client
+	next          *string
+	previous      *string
 }
 
-func startRepl() {
+func startRepl(cfg *config) {
 	scanner := bufio.NewScanner(os.Stdin)
 	allCLIcommands := getAllCommands()
-	mapconfig := config{next: nil, previous: nil}
 	for {
 		fmt.Print("Pokedex > ")
 		scanner.Scan()
@@ -33,7 +35,7 @@ func startRepl() {
 
 		userCommand, valid := allCLIcommands[cleanedUserInputArray[0]]
 		if valid {
-			err := userCommand.callback(&mapconfig)
+			err := userCommand.callback(cfg)
 			if err != nil {
 				fmt.Println(err)
 			}
@@ -59,7 +61,12 @@ func getAllCommands() map[string]cliCommand {
 		"map": {
 			name:        "map",
 			description: "Display the name of 20 location areas in pokemon. each subsequent call to map will display the next 20 locations and so on",
-			callback:    commandMap,
+			callback:    commandMapf,
+		},
+		"mapb": {
+			name:        "mapb",
+			description: "Display the previous 20 location areas in pokemon. each subsequent call to mapb will display the previous 20 locations and so on",
+			callback:    commandMapb,
 		},
 	}
 

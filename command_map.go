@@ -1,48 +1,37 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"net/http"
+
+	"github.com/Awowz/Pokedex/internal/pokeapi"
 )
 
-type PokeMap struct {
-	Count    int     `json:"count"`
-	Next     *string `json:"next"`
-	Previous *string `json:"previous"`
-	Results  []struct {
-		Name string `json:"name"`
-		URL  string `json:"url"`
-	} `json:"results"`
-}
-
-func commandMap(conf *config) error {
-	var res *http.Response
-	var err error
-	if conf.next != nil {
-		res, err = http.Get(*conf.next)
-	} else {
-		res, err = http.Get("https://pokeapi.co/api/v2/location-area/")
-	}
+func commandMapf(conf *config) error {
+	pokeMapData, err := conf.pokeapiClient.ShallowListLocations(conf.next)
 	if err != nil {
 		return err
 	}
-	defer res.Body.Close()
 
-	var pokeMapData PokeMap
-	decoder := json.NewDecoder(res.Body)
-	err = decoder.Decode(&pokeMapData)
+	setandPrintMap(conf, pokeMapData)
 
+	return nil
+}
+
+func commandMapb(conf *config) error {
+	pokeMapData, err := conf.pokeapiClient.ShallowListLocations(conf.previous)
 	if err != nil {
-		return fmt.Errorf("could not decode pokemonAPI json. Error: %v", err)
+		return err
 	}
 
+	setandPrintMap(conf, pokeMapData)
+	return nil
+}
+
+func setandPrintMap(conf *config, pokeMapData pokeapi.PokeMap) {
 	conf.next = pokeMapData.Next
 	conf.previous = pokeMapData.Previous
 
 	for _, x := range pokeMapData.Results {
 		fmt.Println(x.Name)
 	}
-
-	return nil
 }
