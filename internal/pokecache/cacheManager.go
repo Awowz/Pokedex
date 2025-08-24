@@ -15,4 +15,4 @@ func (c Cache) Get(key string) ([]byte, bool) {
 	return data.val, found
 }
 
-//reminder to add mutex to struct
+//func (c Cache) reapLoop()
