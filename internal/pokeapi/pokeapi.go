@@ -3,6 +3,8 @@ package pokeapi
 import (
 	"net/http"
 	"time"
+
+	"github.com/Awowz/Pokedex/internal/pokecache"
 )
 
 type PokeMap struct {
@@ -16,11 +18,13 @@ type PokeMap struct {
 }
 
 type Client struct {
-	httpClient http.Client
+	httpClient  http.Client
+	clientCache pokecache.Cache
 }
 
-func NewClient(interval time.Duration) Client {
+func NewClient(timeout time.Duration) Client {
 	return Client{
-		httpClient: http.Client{Timeout: interval},
+		httpClient:  http.Client{Timeout: timeout},
+		clientCache: pokecache.NewCache(timeout),
 	}
 }
