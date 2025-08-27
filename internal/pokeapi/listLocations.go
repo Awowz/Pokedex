@@ -55,3 +55,7 @@ func GetPokeMapFromCache(data []byte) (PokeMap, error) {
 	}
 	return myPokeMap, nil
 }
+
+func (c *cache) listPokemonFromLocation(providedURL *string) {
+	//TODO add return methods, add logic
+}
