@@ -6,7 +6,7 @@ import (
 	"github.com/Awowz/Pokedex/internal/pokeapi"
 )
 
-func commandMapf(conf *config) error {
+func commandMapf(conf *config, argz []string) error {
 	pokeMapData, err := conf.pokeapiClient.ShallowListLocations(conf.next)
 	if err != nil {
 		return err
@@ -17,7 +17,7 @@ func commandMapf(conf *config) error {
 	return nil
 }
 
-func commandMapb(conf *config) error {
+func commandMapb(conf *config, argz []string) error {
 	pokeMapData, err := conf.pokeapiClient.ShallowListLocations(conf.previous)
 	if err != nil {
 		return err

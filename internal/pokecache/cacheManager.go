@@ -1,7 +1,6 @@
 package pokecache
 
 import (
-	"fmt"
 	"sync"
 	"time"
 )
@@ -30,7 +29,6 @@ func (c *Cache) reapLoop() {
 		for key := range c.cacheMap {
 			dataEntryEndTime := c.cacheMap[key].createdAt.Add(c.interval)
 			if current_time.Equal(dataEntryEndTime) || current_time.After(dataEntryEndTime) {
-				fmt.Printf("reaping...")
 				c.mu.Lock()
 				delete(c.cacheMap, key)
 				c.mu.Unlock()
