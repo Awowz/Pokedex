@@ -42,7 +42,7 @@ type PokemonData struct {
 	} `json:"stats"`
 	Types []struct {
 		Type struct {
-			Name string `json:"type"`
+			Name string `json:"name"`
 		} `json:"type"`
 	} `json:"types"`
 }
